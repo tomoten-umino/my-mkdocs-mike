@@ -1,9 +1,9 @@
 # ポータブルGluster
-This repository contains the tool to create the docker image of Glusterfs container with 2 replicas.
+このリポジトリには、2つのレプリカを持つGlusterfsコンテナのDockerイメージを作成するツールが含まれています。
 
 ![Concept](./images/DevelopmentAndDeployment.ja.png)
 
-# Table of contents
+# 目次
 - [Dependancy](#dependency)
 - [Usage](#usage)
   - [Directory-Structure](#directory-structure)
@@ -13,42 +13,42 @@ This repository contains the tool to create the docker image of Glusterfs contai
 - [License](#license)
 
 # Dependency
-* This tool uses the following software.
+* このツールは、以下のソフトウェアを使用します。
   * docker and docker-compose
   * bash
   * envsubst
 
 # Usage
-## Directory-Structure
+## ディレクトリ構成
 ![Directory](./images/DirectoryStructure.ja.png)
 
-## Setting
-* This tool can change the following parameter names by defining them in the setup/.env file.
-  * NETWORK_ADDR : Network address of the production environment.
-  * HOSTNAME_1 : Gluster-container-1's name
-  * IP_ADDR_1 : Gluster-container-1's address 
-  * HOSTNAME_2 : Gluster-container-2's name
-  * IP_ADDR_2  : Gluster-container-2's address
-  * VOLUME_NAME : Gluster volume name
+## 設定
+* 本ツールでは、setup/.envファイルに定義することで、以下のパラメータ名を変更することができます。
+  * NETWORK_ADDR : 製品環境のネットワークアドレス
+  * HOSTNAME_1 : Gluster-container-1のホスト名
+  * IP_ADDR_1 : Gluster-container-1のIPアドレス 
+  * HOSTNAME_2 : Gluster-container-2のホスト名
+  * IP_ADDR_2  : Gluster-container-2のIPアドレス
+  * VOLUME_NAME : Glusterのボリューム名
 
-## Building
-* After moving to the setup directory, run build.sh as follows.
-  * You can check the Usage by running the -h(or --help) option to build.sh
-  * `AAAAA:BBBBB` is docker image name and tag.
-* After executing build.sh, the docker image (portable-gluster.tar) and docker-compose.yml for deployment will be generated in the deploy directory.
+## ビルド
+* setupディレクトリに移動後、以下のようにbuild.shを実行してください。
+  * build.shのオプションは-h（または--help）を引数に実行すると確認できます。
+  * `AAAAA:BBBBB` はdocker image:tagのことです。
+* build.sh実行後、deployディレクトリにdocker image (portable-gluster.tar) デプロイ用docker-compose.ymlが生成されます。
 
 ```command
 $ cd [setup directory]
 $ ./build.sh -t AAAAAA:BBBBBB   
 ```
 
-## Deployment
-* Transfer what is under the deploy directory to any directory in the production environment.
-* After moving to the setup directory, load the docker image in the deploy directory.
-  * Run as a user who can use the docker command.
-* After loading docker iamge, Start the docker container as follows.
-  * Run on two servers at the same time.
-  * Glusterfs logs are output to the log directory.
+## デプロイ
+* デプロイディレクトリの下にあるものを、本番環境の任意のディレクトリに転送します。
+* setupディレクトリに移動した後、deployディレクトリにあるdockerイメージを読み込みます。
+  * dockerコマンドが使えるユーザで実行すること。
+* docker iamgeをロードしたら、次のようにdockerコンテナを起動します。
+  * 2つのサーバで同時に実行してください。
+  * 起動ログはlogディレクトリに出力されます。
 
 ```command
 $ cd [deploy directory]
@@ -59,11 +59,11 @@ $ docker-compose up -d gluster-server-1
 $ docker-compose up -d gluster-server-2
 ```
 
-### Remarks
-* The Gluster container moves the Glusterfs configuration directory in the container to the specified location at startup as the following figure.
+### 備考
+* Glusterコンテナは、下図のように起動時にコンテナ内のGlusterfs設定ディレクトリを指定した場所に移動する。
 
 ![ConfigDir](./images/MoveConfigDirectory.ja.png)
 
 
-# License
-This tool is released under the WTFPL, see LICENSE.
+# ライセンス
+このツールはWTFPLでリリースされています（LICENSE参照）。
