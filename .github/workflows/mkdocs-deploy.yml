@@ -2,7 +2,8 @@ name: MkDocsTest
 
 on: 
   push:
-    tags
+    tags:
+      - '*'
 
 jobs:
   test:
