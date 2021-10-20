@@ -19,10 +19,8 @@ jobs:
       - name: build-mkdocs
         run: |
           python -m pip install mkdocs mkdocs-material pygments plantuml_markdown mkdocs-static-i18n mike
-#          mkdocs build --clean
           mike deploy ${{ github.ref }}
       - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-#          publish_dir: ./site
