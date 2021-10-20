@@ -14,6 +14,11 @@ nav:
 
 plugins:
   - search:
+  - mike:
+      version_selector: true
+      css_dir: css
+      javascript_dir: js
+      canonical_version: null
   - i18n:
       default_language: en
       languages:
