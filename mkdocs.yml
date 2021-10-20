@@ -30,6 +30,10 @@ plugins:
           Introduction: はじめに
           MkDocs Sample: MkDocsのサンプル
 
+extra:
+    version:
+        provider: mike
+
 markdown_extensions:
     - codehilite:
         noclasses: true
