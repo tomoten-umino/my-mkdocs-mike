@@ -24,8 +24,12 @@ jobs:
           python -m pip install mkdocs mkdocs-material pygments plantuml_markdown mkdocs-static-i18n mike
           git config --local user.name github-actions
           git config user.email github-actions@github.com
+          git remote -v
+          echo "======================================================================================="
           git remote set-url --add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
           git remote set-url --delete origin https://github.com/$GITHUB_REPOSITORY
+          echo "======================================================================================="
+          git remote -v
           mike deploy `echo "${REF##*/}"`
           git checkout gh-pages
           cat .git/config
