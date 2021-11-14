@@ -8,3 +8,5 @@ services:
     command: /bin/bash
     volumes:
       - ${PWD}:/workspace
+    ports:
+      - 8000:8000
