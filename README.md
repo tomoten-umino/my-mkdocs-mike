@@ -28,7 +28,7 @@ my-mkdocs-mike
 ├── docs
 │   ├── index.ja.md
 │   ├── index.md
-│   └── topic1（中身は省略。参考ページ[2]参照。）
+│   └── topic1（中身は省略）
 ├── mkdocs.yml
 ├── requirements.txt
 └── site
