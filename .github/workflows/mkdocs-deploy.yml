@@ -43,6 +43,11 @@ jobs:
           git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git fetch
 
+      - name: make gh-pages branch
+        if: ${{ success() }}
+        run: |
+          git branch gh-pages origin/release-pages
+
       - name: check mike list previous
         if: ${{ success() }}
         continue-on-error: true
@@ -53,15 +58,39 @@ jobs:
           fi
 
       - name: build mkdocs
+        if: ${{ success() }}
         run: |
           mike deploy ${{env.version}}
 
-      - name: push and pull request
+      - name: checkout gh-pages
         if: ${{ success() }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git checkout gh-pages
-          hub push origin gh-pages
-          hub pull-request -b release-pages -m "Release MkDocs ver.${{ env.version }}"
+
+      - name: pull request
+        if: ${{ success() }}
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Update MkDocs 
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
+          branch: gh-pages
+          base: release-pages
+          delete-branch: true
+          title: 'Update MkDocs'
+          body: |
+            Update report
+          labels: |
+            automated pr
+          draft: false
+#      - name: pull request
+#        if: ${{ success() }}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        run: |
+#          git checkout gh-pages
+#          hub push origin gh-pages
+#          hub pull-request -b release-pages -m "Release MkDocs ver.${{ env.version }}"
 
