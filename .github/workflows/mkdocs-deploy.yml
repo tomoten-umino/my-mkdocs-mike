@@ -10,23 +10,27 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: setup
+      - name: execute apt install
         run: |
           sudo apt update
           sudo apt install -y hub
-      - name: checkout
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.ref }}
-      - name: env
+
+      - name: setup python
         if: ${{ success() }}
         uses: actions/setup-python@v2
         with:
           python-version: '3.10.0'
+
+      - name: checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+
       - name: pip install
         if: ${{ success() }}
         run: |
           pip install -r requirements.txt 
+
       - name: setup mkdocs project
         if: ${{ success() }}
         env:
@@ -38,6 +42,7 @@ jobs:
           git config --local user.name "${GITHUB_ACTOR}"
           git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git fetch
+
       - name: check mike list previous
         if: ${{ success() }}
         continue-on-error: true
@@ -46,30 +51,17 @@ jobs:
           if [ $? ]; then
             mike delete ${{env.version}}
           fi
+
       - name: build mkdocs
+        run: |
+          mike deploy ${{env.version}}
+
+      - name: push and pull request
         if: ${{ success() }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mike deploy ${{env.version}}
           git checkout gh-pages
           hub push origin gh-pages
-          hub pull-request -b release-pages -m "Release ${{ env.version }}"
-#      - name: PR to release-pages
-#        if: ${{ success() }}
-#        run: |
-#          hub pull-request -b release-pages -m "Release ${{ env.version }}"
-#        uses: peter-evans/create-pull-request@v3
-#        with:
-#          branch: gh-pages
-#          base: release-pages
-#          branch-suffix: timestamp
-#          delete-branch: true
-#          title: "Deploy MkDocs ver.${{env.version}}"
-#          draft: false
-#          if [ $? != 0 ]; then mike delete ${VER}; fi
-#          git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
-#      - uses: peaceiris/actions-gh-pages@v3
-#        with:
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
-#          publish_branch: gh-pages
+          hub pull-request -b release-pages -m "Release MkDocs ver.${{ env.version }}"
+
