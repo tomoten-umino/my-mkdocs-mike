@@ -34,7 +34,6 @@ jobs:
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git fetch
           echo "debug 3"
-          mike list | grep ${VER}
           mike deploy ${VER}
           git checkout gh-pages
           cat .git/config
