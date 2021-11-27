@@ -1,6 +1,7 @@
 name: MkDocsTest
 
-on: 
+on:
+  workflow_dispatch:
   push:
     tags:
       - '*'
@@ -20,17 +21,21 @@ jobs:
       - name: build-mkdocs
         env:
           REF: ${{ github.ref }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACTIONS_USER: ${{ secrets.MY_ACTIONS_USER }}
+          ACTIONS_TOKEN: ${{ secrets.MY_ACTIONS_TOKEN }}
         run: |
+          export VER=`echo "${REF##*/}"`
           python -m pip install mkdocs mkdocs-material pygments plantuml_markdown mkdocs-static-i18n mike
-          git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+          git remote set-url origin https://${ACTIONS_USER}:${ACTIONS_TOKEN}@github.com/${GITHUB_REPOSITORY}
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git fetch
-          mike deploy `echo "${REF##*/}"`
+          mike delete ${VER}
+          mike deploy ${VER}
           git checkout gh-pages
           cat .git/config
           git push origin gh-pages
+#          git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
 #      - uses: peaceiris/actions-gh-pages@v3
 #        with:
 #          github_token: ${{ secrets.GITHUB_TOKEN }}
