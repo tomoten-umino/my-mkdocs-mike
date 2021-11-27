@@ -36,20 +36,18 @@ jobs:
           git config --local user.name "${GITHUB_ACTOR}"
           git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git fetch
-      - name: check mike list
+      - name: check mike list previous
         if: ${{ success() }}
+        continue-on-error: true
         run: |
           mike list | grep ${{env.version}}
-      - name: delete list
-        if: ${{ success() }}
-        run: | 
-          mike delete ${{env.version}}
+          if [ echo $? ]; then mike delete ${{env.version}}; fi
       - name: build mkdocs
-        if: ${{ always() }}
+        if: ${{ success() }}
         run: |
-          mike deploy ${{env.version}}
           git checkout gh-pages
           git push origin gh-pages
+#          mike deploy ${{env.version}}
 #      - name: PR to release-pages
 #        uses: peter-evans/create-pull-request@v3
 #        with:
