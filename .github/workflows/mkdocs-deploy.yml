@@ -31,12 +31,10 @@ jobs:
         if: ${{ success() }}
         env:
           REF: ${{ github.ref }}
-          ACTIONS_USER: ${{ secrets.MY_ACTIONS_USER }}
-          ACTIONS_TOKEN: ${{ secrets.MY_ACTIONS_TOKEN }}
         run: |
           export VER=`echo "${REF##*/}"`
           echo "version=${VER}" >> $GITHUB_ENV
-          git remote set-url origin https://${ACTIONS_USER}:${ACTIONS_TOKEN}@github.com/${GITHUB_REPOSITORY}
+          git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
           git config --local user.name "${GITHUB_ACTOR}"
           git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git fetch
@@ -51,7 +49,7 @@ jobs:
       - name: build mkdocs
         if: ${{ success() }}
         env:
-          GITHUB_TOKEN: ${{ secrets.MY_ACTIONS_TOKEN }}
+          GITHUB_TOKEN: ${GITHUB_TOKEN}
         run: |
           mike deploy ${{env.version}}
           git checkout gh-pages
