@@ -15,10 +15,16 @@ jobs:
         with:
           ref: ${{ github.ref }}
       - name: env
+        if: ${{ success() }}
         uses: actions/setup-python@v2
         with:
           python-version: '3.10.0'
-      - name: build-mkdocs
+      - name: pip install
+        if: ${{ success() }}
+        run: |
+          pip install -r requirements.txt 
+      - name: setup mkdocs project
+        if: ${{ success() }}
         env:
           REF: ${{ github.ref }}
           ACTIONS_USER: ${{ secrets.MY_ACTIONS_USER }}
@@ -26,18 +32,23 @@ jobs:
         run: |
           export VER=`echo "${REF##*/}"`
           echo "version=${VER}" >> $GITHUB_ENV
-          pip install -r requirements.txt 
-          echo "debug 1"
           git remote set-url origin https://${ACTIONS_USER}:${ACTIONS_TOKEN}@github.com/${GITHUB_REPOSITORY}
-          echo "debug 2"
-          echo ${GITHUB_ACTOR}
           git config --local user.name "${GITHUB_ACTOR}"
           git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git fetch
-          echo "debug 3"
-          mike deploy ${VER}
-          git checkout gh-pages
-          git push origin gh-pages
+      - name: check mike list
+        if: ${{ success() }}
+        run: |
+          mike list | grep ${{env.version}}
+      - name: delete list
+        if: ${{ success() }}
+        run: | 
+          mike delete ${{env.version}}
+#      - name: build mkdocs
+#        if: ${{ always() }}
+#          mike deploy ${{env.version}}
+#          git checkout gh-pages
+#          git push origin gh-pages
 #      - name: PR to release-pages
 #        uses: peter-evans/create-pull-request@v3
 #        with:
