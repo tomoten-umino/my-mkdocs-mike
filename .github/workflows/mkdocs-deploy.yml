@@ -41,8 +41,8 @@ jobs:
       - name: PR to release-pages
         uses: peter-evans/create-pull-request@v3
         with:
-          branch: release-pages
-          base: gh-pages
+          branch: gh-pages
+          base: release-pages
           title: "Deploy MkDocs ver.${{env.version}}"
           draft: false
 #          if [ $? != 0 ]; then mike delete ${VER}; fi
