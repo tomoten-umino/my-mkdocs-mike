@@ -45,8 +45,12 @@ jobs:
 
       - name: make gh-pages branch
         if: ${{ success() }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git branch gh-pages origin/release-pages
+          git checkout -b gh-pages origin/release-pages
+          git push origin gh-pages
+          git checkout ${{ github.ref }}
 
       - name: check mike list previous
         if: ${{ success() }}
