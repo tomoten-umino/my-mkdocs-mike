@@ -41,7 +41,7 @@ jobs:
         continue-on-error: true
         run: |
           mike list | grep ${{env.version}}
-          if [ echo $? ]; then
+          if [ $? ]; then
             mike delete ${{env.version}}
           fi
       - name: build mkdocs
