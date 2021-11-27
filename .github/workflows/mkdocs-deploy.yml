@@ -47,9 +47,9 @@ jobs:
       - name: build mkdocs
         if: ${{ success() }}
         run: |
+          mike deploy ${{env.version}}
           git checkout gh-pages
           git push origin gh-pages
-#          mike deploy ${{env.version}}
 #      - name: PR to release-pages
 #        uses: peter-evans/create-pull-request@v3
 #        with:
