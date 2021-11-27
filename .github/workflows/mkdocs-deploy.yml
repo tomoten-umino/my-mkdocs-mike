@@ -53,11 +53,12 @@ jobs:
         run: |
           mike deploy ${{env.version}}
           git checkout gh-pages
-          git push origin gh-pages
-      - name: PR to release-pages
-        if: ${{ success() }}
-        run: |
+          hub push origin gh-pages
           hub pull-request -b release-pages -m "Release ${{ env.version }}"
+#      - name: PR to release-pages
+#        if: ${{ success() }}
+#        run: |
+#          hub pull-request -b release-pages -m "Release ${{ env.version }}"
 #        uses: peter-evans/create-pull-request@v3
 #        with:
 #          branch: gh-pages
