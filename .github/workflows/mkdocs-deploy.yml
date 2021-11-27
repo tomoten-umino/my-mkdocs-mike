@@ -17,7 +17,7 @@ jobs:
       - name: env
         uses: actions/setup-python@v2
         with:
-          python-version: '3.9.7'
+          python-version: '3.10.0'
       - name: build-mkdocs
         env:
           REF: ${{ github.ref }}
@@ -25,7 +25,7 @@ jobs:
           ACTIONS_TOKEN: ${{ secrets.MY_ACTIONS_TOKEN }}
         run: |
           export VER=`echo "${REF##*/}"`
-          python -m pip install mkdocs mkdocs-material pygments plantuml_markdown mkdocs-static-i18n mike
+          pip install -r requirements.requirements.txt 
           echo "debug 1"
           git remote set-url origin https://${ACTIONS_USER}:${ACTIONS_TOKEN}@github.com/${GITHUB_REPOSITORY}
           echo "debug 2"
