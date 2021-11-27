@@ -46,6 +46,7 @@ jobs:
           mike delete ${{env.version}}
       - name: build mkdocs
         if: ${{ always() }}
+        run: |
           mike deploy ${{env.version}}
           git checkout gh-pages
           git push origin gh-pages
