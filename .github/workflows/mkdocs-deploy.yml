@@ -10,6 +10,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: setup
+        run: |
+          sudo apt update
+          sudo apt install hub
       - name: checkout
         uses: actions/checkout@v2
         with:
@@ -50,15 +54,15 @@ jobs:
           mike deploy ${{env.version}}
           git checkout gh-pages
           git push origin gh-pages
-      - name: PR to release-pages
-        uses: peter-evans/create-pull-request@v3
-        with:
-          branch: gh-pages
-          base: release-pages
-          branch-suffix: timestamp
-          delete-branch: true
-          title: "Deploy MkDocs ver.${{env.version}}"
-          draft: false
+#      - name: PR to release-pages
+#        uses: peter-evans/create-pull-request@v3
+#        with:
+#          branch: gh-pages
+#          base: release-pages
+#          branch-suffix: timestamp
+#          delete-branch: true
+#          title: "Deploy MkDocs ver.${{env.version}}"
+#          draft: false
 #          if [ $? != 0 ]; then mike delete ${VER}; fi
 #          git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
 #      - uses: peaceiris/actions-gh-pages@v3
