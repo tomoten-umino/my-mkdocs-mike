@@ -26,7 +26,9 @@ jobs:
         run: |
           export VER=`echo "${REF##*/}"`
           python -m pip install mkdocs mkdocs-material pygments plantuml_markdown mkdocs-static-i18n mike
+          echo "debug 1"
           git remote set-url origin https://${ACTIONS_USER}:${ACTIONS_TOKEN}@github.com/${GITHUB_REPOSITORY}
+          echo "debug 2"
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git fetch
