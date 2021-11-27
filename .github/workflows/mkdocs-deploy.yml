@@ -35,11 +35,11 @@ jobs:
           git fetch
           echo "debug 3"
           mike list | grep ${VER}
-          if [ $? != 0 ]; then mike delete ${VER}; fi
           mike deploy ${VER}
           git checkout gh-pages
           cat .git/config
           git push origin gh-pages
+#          if [ $? != 0 ]; then mike delete ${VER}; fi
 #          git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
 #      - uses: peaceiris/actions-gh-pages@v3
 #        with:
