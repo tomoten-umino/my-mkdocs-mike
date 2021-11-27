@@ -1,7 +1,7 @@
 # my-mkdocs-mike
 
 このプロジェクトは、MkDocsのプラグインmikeの試使用プロジェクトである。  
-サンプルページ：https://tomoten-umino.github.io/my-mkdocs-mike/
+サンプルページ：<https://tomoten-umino.github.io/my-mkdocs-mike/>
 
 ## 動作確認した環境
 
@@ -50,7 +50,7 @@ $ code .
 
 - VS Code左下にある「＞＜」みたいなボタンを押下して、「Reopen in Container」を押下します。
   - python3のdevcontainerが起動します。
-- VS Code内でリモート接続中のコンテナ内のターミナルを開き、pipで必要なツールをインストールする。
+- VS Code内でリモート接続中のcontainer内のターミナルを開き、pipで必要なツールをインストールする。
 
 ```bash
 （devcontainer内）
@@ -60,5 +60,5 @@ $ pip install -r requirements.txt
 ## mikeの使い方
 
 - 以下のサイトを参考にすること。
-  - mike : https://opensourcelibs.com/lib/mike
-  - qiita記事 : https://qiita.com/tomoten/items/39b87fc114d8f41b5ebd
+  - mike : <https://opensourcelibs.com/lib/mike>
+  - qiita記事 : <https://qiita.com/tomoten/items/39b87fc114d8f41b5ebd>
