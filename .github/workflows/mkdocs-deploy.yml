@@ -30,7 +30,8 @@ jobs:
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git fetch
-          mike delete ${VER}
+          mike list | grep ${VER}
+          if [ $? != 0 ]; then mike delete ${VER}; fi
           mike deploy ${VER}
           git checkout gh-pages
           cat .git/config
