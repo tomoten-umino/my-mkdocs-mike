@@ -1,7 +1,7 @@
 # my-mkdocs-mike
 
 このプロジェクトは、MkDocsのプラグインmikeの試使用プロジェクトである。  
-サンプルページ：<https://tomoten-umino.github.io/my-mkdocs-mike/>
+サンプルページ：<https://tomoten-umino.github.io/my-mkdocs-mike/master>
 
 ## 動作確認した環境
 
