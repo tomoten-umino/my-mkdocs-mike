@@ -1,4 +1,4 @@
-name: MkDocsTest
+name: MkDocsBuild
 
 on:
   workflow_dispatch:
@@ -10,7 +10,7 @@ env:
   PR_BRANCH: gh-pages-${{ github.run_number }}
 
 jobs:
-  test:
+  release-PR:
     runs-on: ubuntu-latest
     steps:
       - name: execute apt install
@@ -46,7 +46,7 @@ jobs:
           git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git fetch
 
-      - name: make gh-pages branch
+      - name: make PR_BRANCH
         if: ${{ success() }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -59,15 +59,15 @@ jobs:
         if: ${{ success() }}
         continue-on-error: true
         run: |
-          mike list --branch ${{ env.PR_BRANCH }} | grep ${{env.version}}
+          mike list --branch ${{ env.PR_BRANCH }} | grep ${{ env.version }}
           if [ $? ]; then
-            mike delete --branch ${{ env.PR_BRANCH }} ${{env.version}}
+            mike delete --branch ${{ env.PR_BRANCH }} ${{ env.version }}
           fi
 
       - name: build mkdocs
         if: ${{ success() }}
         run: |
-          mike deploy --branch ${{ env.PR_BRANCH }} ${{env.version}}
+          mike deploy --branch ${{ env.PR_BRANCH }} ${{ env.version }}
 
       - name: checkout PR_BRANCH
         if: ${{ success() }}
