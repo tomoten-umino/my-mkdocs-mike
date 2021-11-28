@@ -8,6 +8,8 @@ on:
 
 jobs:
   test:
+    env:
+      PR_BRANCH: gh-pages-${GITHUB_RUN_ID}
     runs-on: ubuntu-latest
     steps:
       - name: execute apt install
@@ -48,28 +50,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git checkout -b gh-pages origin/release-pages
-          git push origin gh-pages
+          git checkout -b ${PR_BRANCH} origin/gh-pages
+          git push origin ${PR_BRANCH}
           git checkout ${{ github.ref }}
 
       - name: check mike list previous
         if: ${{ success() }}
         continue-on-error: true
         run: |
-          mike list | grep ${{env.version}}
+          mike list --branch ${PR_BRANCH} | grep ${{env.version}}
           if [ $? ]; then
-            mike delete ${{env.version}}
+            mike delete --branch ${PR_BRANCH} ${{env.version}}
           fi
 
       - name: build mkdocs
         if: ${{ success() }}
         run: |
-          mike deploy ${{env.version}}
+          mike deploy --branch ${PR_BRANCH} ${{env.version}}
 
-      - name: checkout gh-pages
+      - name: checkout PR_BRANCH
         if: ${{ success() }}
         run: |
-          git checkout gh-pages
+          git checkout ${PR_BRANCH}
 
       - name: pull request
         if: ${{ success() }}
@@ -80,8 +82,8 @@ jobs:
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
-          branch: gh-pages
-          base: release-pages
+          branch: ${PR_BRANCH}
+          base: gh-pages
           delete-branch: true
           title: 'Update MkDocs'
           body: |
@@ -89,12 +91,3 @@ jobs:
           labels: |
             automated pr
           draft: false
-#      - name: pull request
-#        if: ${{ success() }}
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        run: |
-#          git checkout gh-pages
-#          hub push origin gh-pages
-#          hub pull-request -b release-pages -m "Release MkDocs ver.${{ env.version }}"
-
