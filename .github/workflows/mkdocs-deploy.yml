@@ -6,10 +6,11 @@ on:
     tags:
       - '*'
 
+env:
+  PR_BRANCH: gh-pages-${GITHUB_RUN_ID}
+
 jobs:
   test:
-    env:
-      PR_BRANCH: gh-pages-${GITHUB_RUN_ID}
     runs-on: ubuntu-latest
     steps:
       - name: execute apt install
@@ -50,28 +51,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git checkout -b ${PR_BRANCH} origin/gh-pages
-          git push origin ${PR_BRANCH}
+          git checkout -b ${{ env.PR_BRANCH }} origin/gh-pages
+          git push origin ${{ env.PR_BRANCH }}
           git checkout ${{ github.ref }}
 
       - name: check mike list previous
         if: ${{ success() }}
         continue-on-error: true
         run: |
-          mike list --branch ${PR_BRANCH} | grep ${{env.version}}
+          mike list --branch ${{ env.PR_BRANCH }} | grep ${{env.version}}
           if [ $? ]; then
-            mike delete --branch ${PR_BRANCH} ${{env.version}}
+            mike delete --branch ${{ env.PR_BRANCH }} ${{env.version}}
           fi
 
       - name: build mkdocs
         if: ${{ success() }}
         run: |
-          mike deploy --branch ${PR_BRANCH} ${{env.version}}
+          mike deploy --branch ${{ env.PR_BRANCH }} ${{env.version}}
 
       - name: checkout PR_BRANCH
         if: ${{ success() }}
         run: |
-          git checkout ${PR_BRANCH}
+          git checkout ${{ env.PR_BRANCH }}
 
       - name: pull request
         if: ${{ success() }}
@@ -82,7 +83,7 @@ jobs:
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
-          branch: ${PR_BRANCH}
+          branch: ${{ env.PR_BRANCH }}
           base: gh-pages
           delete-branch: true
           title: 'Update MkDocs'
