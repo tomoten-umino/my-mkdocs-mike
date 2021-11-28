@@ -7,7 +7,7 @@ on:
       - '*'
 
 env:
-  PR_BRANCH: gh-pages-${GITHUB_RUN_ID}
+  PR_BRANCH: gh-pages-${{ github.run_number }}
 
 jobs:
   test:
